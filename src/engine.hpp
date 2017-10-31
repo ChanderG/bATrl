@@ -1,3 +1,10 @@
+#ifndef ENGINE_H
+#define ENGINE_H
+
+#include "libtcod.hpp"
+#include "actor.hpp"
+#include "map.hpp"
+
 class Engine {
   public :
     TCODList<Actor *> actors;
@@ -11,3 +18,4 @@ class Engine {
 };
 
 extern Engine engine;
+#endif
