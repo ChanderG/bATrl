@@ -1,12 +1,14 @@
 #include "libtcod.hpp"
+#include "actor.hpp"
+#include "map.hpp"
+#include "engine.hpp"
+
+Engine engine;
 
 int main(){
-  TCODConsole::initRoot(80, 50, "Batman RL", false);
   while( !TCODConsole::isWindowClosed()){
-    TCOD_key_t key;
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
-    TCODConsole::root->clear();
-    TCODConsole::root->putChar(40, 25, '@');
+    engine.update();
+    engine.render();
     TCODConsole::flush();
   }
   return 0;
