@@ -1,11 +1,15 @@
 #include "engine.hpp"
 
-Engine::Engine() : gameStatus(STARTUP){
-  TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false);
+Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight){
+  TCODConsole::initRoot(screenWidth, screenHeight, "libtcod C++ tutorial",false);
+  TCODConsole::root->setDefaultForeground(TCODColor::white);
   player = new Actor(40,25,'@', "Batman", TCODColor::white);
+  player->destructible=new PlayerDestructible(30,2,"your cadaver");
+  player->attacker=new Attacker(5);
+  player->ai = new PlayerAi();
   actors.push(player);
 
-  map = new Map(80,45);
+  map = new Map(screenWidth, screenHeight - 5);
 }
 
 Engine::~Engine() {
@@ -16,21 +20,11 @@ Engine::~Engine() {
 void Engine::update() {
   gameStatus = IDLE;
 
-  TCOD_key_t key;
-  int dx=0,dy=0;
-  TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&key,NULL);
-  switch(key.vk) {
-    case TCODK_UP : dy=-1; break;
-    case TCODK_DOWN : dy=1; break;
-    case TCODK_LEFT : dx=-1; break;
-    case TCODK_RIGHT : dx=1; break;
-    default:break;
-  }
-
-  if ( dx != 0 || dy != 0 ) {
-    gameStatus=NEW_TURN;
-    player->moveOrAttack(player->x+dx,player->y+dy);
-  }
+  TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
+  player->update();
+  // show the player's stats
+  TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d",
+      (int)player->destructible->hp,(int)player->destructible->maxHp);
 
   if ( gameStatus == NEW_TURN ) {
     for (Actor **iterator=actors.begin(); iterator != actors.end();
@@ -52,4 +46,9 @@ void Engine::render() {
   for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
     (*iterator)->render();
   }
+}
+
+void Engine::sendToBack(Actor *actor) {
+  actors.remove(actor);
+  actors.insertBefore(actor,0);
 }

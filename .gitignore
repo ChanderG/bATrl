@@ -1,0 +1,6 @@
+*.swp
+include/
+*.so
+brl
+tags
+terminal.png

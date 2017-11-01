@@ -116,7 +116,7 @@ bool Map::canWalk(int x, int y) const {
   for (Actor **iterator=engine.actors.begin();
       iterator!=engine.actors.end();iterator++) {
     Actor *actor=*iterator;
-    if ( actor->x == x && actor->y == y ) {
+    if ( actor->blocks && actor->x == x && actor->y == y ) {
       // there is an actor there. cannot walk
       return false;
     }
@@ -127,12 +127,18 @@ bool Map::canWalk(int x, int y) const {
 void Map::addMonster(int x, int y){
   TCODRandom *rng=TCODRandom::getInstance();
   if ( rng->getInt(0,100) < 80 ) {
-    // create an orc
-    engine.actors.push(new Actor(x,y,'t',"thug",
-	  TCODColor::desaturatedGreen));
+    // create a thug
+    Actor *thug = new Actor(x,y,'t',"thug", TCODColor::desaturatedGreen);
+    thug->destructible = new MonsterDestructible(10,0,"unconcious thug");
+    thug->attacker = new Attacker(3);
+    thug->ai = new MonsterAi();
+    engine.actors.push(thug);
   } else {
-    // create a troll
-    engine.actors.push(new Actor(x,y,'g',"gangster",
-	  TCODColor::darkerGreen));
+    // create a gangster
+    Actor *gangster = new Actor(x,y,'g',"gangster", TCODColor::darkerGreen);
+    gangster->destructible = new MonsterDestructible(16,1,"passed out gangster");
+    gangster->attacker = new Attacker(4);
+    gangster->ai = new MonsterAi();
+    engine.actors.push(gangster);
   }
 }
