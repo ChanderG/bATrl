@@ -3,4 +3,4 @@ include/
 *.so
 brl
 tags
-terminal.png
+*.png

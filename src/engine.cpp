@@ -3,18 +3,24 @@
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight){
   TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
   TCODConsole::initRoot(screenWidth, screenHeight, "libtcod C++ tutorial",false);
+
+  // create player
   player = new Actor(40,25,'B', "Batman", TCODColor::white);
   player->destructible=new PlayerDestructible(30,2,"your cadaver");
   player->attacker=new Attacker(5);
   player->ai = new PlayerAi();
   actors.push(player);
 
-  map = new Map(screenWidth, screenHeight - 5);
+  map = new Map(screenWidth, screenHeight - 7);
+  gui = new Gui();
+
+  gui->message(TCODColor::yellow, "Welcome back, Master Wayne.\n How was your vacation?");
 }
 
 Engine::~Engine() {
   actors.clearAndDelete();
   delete map;
+  delete gui;
 }
 
 void Engine::update() {
@@ -22,9 +28,6 @@ void Engine::update() {
 
   TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
   player->update();
-  // show the player's stats
-  TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d",
-      (int)player->destructible->hp,(int)player->destructible->maxHp);
 
   if ( gameStatus == NEW_TURN ) {
     for (Actor **iterator=actors.begin(); iterator != actors.end();
@@ -46,6 +49,8 @@ void Engine::render() {
   for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
     (*iterator)->render();
   }
+  // show the player's stats
+  gui->render();
 }
 
 void Engine::sendToBack(Actor *actor) {
