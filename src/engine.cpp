@@ -1,9 +1,9 @@
 #include "engine.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight){
+  TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
   TCODConsole::initRoot(screenWidth, screenHeight, "libtcod C++ tutorial",false);
-  TCODConsole::root->setDefaultForeground(TCODColor::white);
-  player = new Actor(40,25,'@', "Batman", TCODColor::white);
+  player = new Actor(40,25,'B', "Batman", TCODColor::white);
   player->destructible=new PlayerDestructible(30,2,"your cadaver");
   player->attacker=new Attacker(5);
   player->ai = new PlayerAi();
