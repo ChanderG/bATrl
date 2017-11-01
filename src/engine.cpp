@@ -9,6 +9,7 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenW
   player->destructible=new PlayerDestructible(30,2,"your cadaver");
   player->attacker=new Attacker(5);
   player->ai = new PlayerAi();
+  player->z = new Z();
   actors.push(player);
 
   map = new Map(screenWidth, screenHeight - 7);
