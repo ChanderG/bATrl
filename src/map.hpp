@@ -14,6 +14,8 @@ class Map {
     ~Map();
     bool isWall(int x, int y) const;
     void render() const;
+    bool canWalk(int x, int y) const;  
+    void addMonster(int x, int y);
 
   protected :
     Tile *tiles;
