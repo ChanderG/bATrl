@@ -22,6 +22,9 @@ void PlayerAi::update(Actor *owner) {
     default:break;
   }
 
+  // For special attak control
+  AgileAttacker *aa = static_cast<AgileAttacker*>(owner->attacker);
+
   // normal move
   if (dx != 0 || dy != 0) {
     engine.gameStatus=Engine::NEW_TURN;
@@ -33,7 +36,11 @@ void PlayerAi::update(Actor *owner) {
     engine.gameStatus=Engine::NEW_TURN;
     toggleZStatus(owner);
     // attack a creature if exists in this cell
-    if (owner->z->onFloor) moveOrAttack(owner, owner->x+dx,owner->y+dy);
+    if (owner->z->onFloor) {
+      aa->setAttackMode(DROP);
+      moveOrAttack(owner, owner->x+dx,owner->y+dy);
+      aa->setAttackMode(PUNCH);
+    }
   }
 
 }

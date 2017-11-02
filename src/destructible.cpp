@@ -40,7 +40,7 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, const char *c
 void MonsterDestructible::die(Actor *owner) {
   // transform it into a nasty corpse! it doesn't block, can't be
   // attacked and doesn't move
-  engine.gui->message(TCODColor::lightGrey, "The %s collapses!",owner->name);
+  engine.gui->message(TCODColor::lightGrey, "The %s crumples!",owner->name);
   Destructible::die(owner);
 }
 
