@@ -27,6 +27,8 @@ class Actor {
     Actor(int x, int y, int ch, const char* name, const TCODColor &col);
     void render() const;
     void update();
+
+    void displace(int dx, int dy); // displace the actor
 };
 
 #endif

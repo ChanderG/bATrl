@@ -27,9 +27,12 @@ class AgileAttacker : public Attacker {
   public:
     std::map<AgileAttack, float> powerMap; // capability of each attack
     std::map<AgileAttack, std::string> msgMap; // capability of each attack
+    AgileAttack attackMode;
 
     AgileAttacker();
     void setAttackMode(AgileAttack mode);  // set attack mode for the next attack
+    void attack(Actor *owner, Actor *target);
+    void postAttack(Actor *owner, Actor *target);
 };
 
 #endif

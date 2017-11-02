@@ -13,16 +13,28 @@ void PlayerAi::update(Actor *owner) {
 
   int dx=0,dy=0;
   int dz=0; // non zero means z level toggle
+  bool c=false; // pressed a character key
   switch(engine.lastKey.vk) {
     case TCODK_UP : dy=-1; break;
     case TCODK_DOWN : dy=1; break;
     case TCODK_LEFT : dx=-1; break;
     case TCODK_RIGHT : dx=1; break;
     case TCODK_SPACE : dz=1; break;
+    case TCODK_CHAR: c=true; break;
+
     default:break;
   }
 
-  // For special attak control
+  // handle char keys
+  bool kick=false;
+  if (c == true){
+    switch(engine.lastKey.c){
+      case 'k': kick=true; break;
+      default:break;
+    }
+  }
+
+  // For special attack control
   AgileAttacker *aa = static_cast<AgileAttacker*>(owner->attacker);
 
   // normal move
@@ -31,13 +43,34 @@ void PlayerAi::update(Actor *owner) {
     moveOrAttack(owner, owner->x+dx,owner->y+dy);
   }
 
-  // request to change z level
+  // linear change z level
   if (dz == 1) {
     engine.gameStatus=Engine::NEW_TURN;
     toggleZStatus(owner);
     // attack a creature if exists in this cell
     if (owner->z->onFloor) {
       aa->setAttackMode(DROP);
+      moveOrAttack(owner, owner->x+dx,owner->y+dy);
+      aa->setAttackMode(PUNCH);
+    }
+  }
+
+  TCOD_key_t lastKey;
+  // handle kick command
+  if (kick == true) {
+    // get kick direction
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, true);
+    switch(lastKey.vk) {
+      case TCODK_UP : dy=-1; break;
+      case TCODK_DOWN : dy=1; break;
+      case TCODK_LEFT : dx=-1; break;
+      case TCODK_RIGHT : dx=1; break;
+      default: break;
+    }
+
+    engine.gameStatus=Engine::NEW_TURN;
+    if (owner->z->onFloor) {
+      aa->setAttackMode(KICK);
       moveOrAttack(owner, owner->x+dx,owner->y+dy);
       aa->setAttackMode(PUNCH);
     }
@@ -58,7 +91,8 @@ bool PlayerAi::moveOrAttack(Actor *owner, int targetx,int targety) {
       if (owner == actor) continue;
       if ( actor->destructible && !actor->destructible->isDead()
 	  && actor->x == targetx && actor->y == targety ) {
-	owner->attacker->attack(owner, actor);
+	AgileAttacker *aa = static_cast<AgileAttacker*>(owner->attacker);
+	aa->attack(owner, actor);
 	return false;
       }
     }
