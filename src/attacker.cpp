@@ -55,7 +55,7 @@ void AgileAttacker::postAttack(Actor *owner, Actor* target){
     int ty = target->y;
 
     // displace the target
-    int effect = 3;
+    int effect = 4;
     int dx = (owner->x > target->x) ? -1 : (owner->x < target->x) ? +1 : 0;
     int dy = (owner->y > target->y) ? -1 : (owner->y < target->y) ? +1 : 0;
     target->displace(dx*effect, dy*effect);
