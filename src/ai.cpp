@@ -3,6 +3,9 @@
 #include <cstdio>
 #include <cmath>
 
+#define PLAYER_HEAL_ODDS 3 // odds of healing this turn
+#define PLAYER_HEAL_AMT 2  // amount healed
+
 PlayerAi::PlayerAi(){
 }
 
@@ -124,6 +127,19 @@ void PlayerAi::update(Actor *owner) {
       aa->setAttackMode(PUNCH);
     }
     // add pound effect from ceiling
+  }
+
+  // probabilistically update health
+  if (engine.gameStatus==Engine::NEW_TURN){
+    TCODRandom *rng=TCODRandom::getInstance();
+    int h=rng->getInt(0, PLAYER_HEAL_ODDS);
+    if(h==0){
+      if (owner->destructible->hp + PLAYER_HEAL_AMT <= owner->destructible->maxHp){
+	owner->destructible->hp += PLAYER_HEAL_AMT;
+      } else {
+	owner->destructible->hp = owner->destructible->maxHp;
+      }
+    }
   }
 }
 
