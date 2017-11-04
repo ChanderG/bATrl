@@ -124,6 +124,8 @@ void MonsterAi::update(Actor *owner) {
 void MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety) {
   int dx = targetx - owner->x;
   int dy = targety - owner->y;
+  int stepx = (dx > 0 ? 1:-1);
+  int stepy = (dy > 0 ? 1:-1);
   float distance=sqrtf(dx*dx+dy*dy);
   if ( distance >= 2 ) {
     dx = (int)(round(dx/distance));
@@ -131,6 +133,10 @@ void MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety) {
     if ( engine.map->canWalk(owner->x+dx,owner->y+dy) ) {
       owner->x += dx;
       owner->y += dy;
+    } else if ( engine.map->canWalk(owner->x,owner->y+stepy) ) {
+      owner->y += stepy;
+    } else if ( engine.map->canWalk(owner->x+stepx,owner->y) ) {
+      owner->x += stepx;
     }
   } else if ( owner->attacker ) {
     owner->attacker->attack(owner,engine.player);
