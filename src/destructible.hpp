@@ -16,18 +16,21 @@ class Destructible {
     inline bool isDead() { return hp <= 0; }
     float takeDamage(Actor *owner, float damage);
     virtual void die(Actor *owner);
+    virtual void indicateHealthStatus(Actor *owner);
 };
 
 class MonsterDestructible : public Destructible {
 public :
    MonsterDestructible(float maxHp, float defense, const char *corpseName);
    void die(Actor *owner);
+   void indicateHealthStatus(Actor *owner);
 };
 
 class PlayerDestructible : public Destructible {
 public :
    PlayerDestructible(float maxHp, float defense, const char *corpseName);
    void die(Actor *owner);
+   void indicateHealthStatus(Actor *owner);
 };
 
 #endif

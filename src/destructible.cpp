@@ -10,6 +10,7 @@ float Destructible::takeDamage(Actor *owner, float damage) {
   damage -= defense;
   if ( damage > 0 ) {
     hp -= damage;
+    indicateHealthStatus(owner);
     if ( hp <= 0 ) {
       die(owner);
     }
@@ -48,4 +49,19 @@ void PlayerDestructible::die(Actor *owner) {
   engine.gui->message(TCODColor::red, "You died!!!");
   Destructible::die(owner);
   engine.gameStatus=Engine::DEFEAT;
+}
+
+void Destructible::indicateHealthStatus(Actor *owner){
+}
+
+/*
+ * Change color of char based on current HP.
+ */
+void MonsterDestructible::indicateHealthStatus(Actor *owner){
+  owner->col = 0.8f*owner->col;
+}
+
+/* Indicate to player, current health status
+*/
+void PlayerDestructible::indicateHealthStatus(Actor *owner){
 }
