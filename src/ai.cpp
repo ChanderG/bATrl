@@ -98,13 +98,20 @@ void PlayerAi::update(Actor *owner) {
     engine.gameStatus=Engine::NEW_TURN;
     if (owner->z->onFloor) {
       aa->setAttackMode(BACKHAND);
+      // save owner location
+      int x = owner->x; int y = owner->y;
       // Backhand the 2 locations behind this direction
+      // reset location after every attack
       if(dx==0){
 	moveOrAttack(owner, owner->x+1,owner->y-dy);
+	owner->x=x; owner->y=y;
 	moveOrAttack(owner, owner->x-1,owner->y-dy);
+	owner->x=x; owner->y=y;
       } else if(dy==0){
 	moveOrAttack(owner, owner->x-dx,owner->y+1);
+	owner->x=x; owner->y=y;
 	moveOrAttack(owner, owner->x-dx,owner->y-1);
+	owner->x=x; owner->y=y;
       }
       // handle diagonal cases eventually
       aa->setAttackMode(PUNCH);
@@ -120,9 +127,10 @@ void PlayerAi::update(Actor *owner) {
       aa->setAttackMode(POUND);
       for(int ix=-1;ix<=1;ix++)
 	for(int iy=-1;iy<=1;iy++){
-	  moveOrAttack(owner, owner->x+ix,owner->y+iy);
-	  owner->x=x;
-	  owner->y=y;
+	  if(moveOrAttack(owner, owner->x+ix,owner->y+iy)){
+	    // if true -> we were moved ->take us back to center
+	    owner->x=x; owner->y=y;
+	  }
 	}
       aa->setAttackMode(PUNCH);
     }
