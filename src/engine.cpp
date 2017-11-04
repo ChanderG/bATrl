@@ -27,7 +27,7 @@ Engine::~Engine() {
 void Engine::update() {
   gameStatus = IDLE;
 
-  TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
+  TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
   player->update();
 
   if ( gameStatus == NEW_TURN ) {

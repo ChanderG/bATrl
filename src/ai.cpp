@@ -66,7 +66,7 @@ void PlayerAi::update(Actor *owner) {
   // handle kick command
   if (kick == true) {
     // get kick direction
-    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, true);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
     switch(lastKey.vk) {
       case TCODK_UP : dy=-1; break;
       case TCODK_DOWN : dy=1; break;
@@ -86,7 +86,7 @@ void PlayerAi::update(Actor *owner) {
   // Backhand the 2 locations to the left and right behind you
   if(backhand==true){
     // get direction you are facing
-    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, true);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
     switch(lastKey.vk) {
       case TCODK_UP : dy=-1; break;
       case TCODK_DOWN : dy=1; break;
