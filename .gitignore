@@ -1,6 +1,6 @@
 *.swp
 include/
 *.so
-brl
+b@rl
 tags
 *.png
