@@ -32,11 +32,13 @@ void PlayerAi::update(Actor *owner) {
   bool kick=false;
   bool backhand=false;
   bool pound=false;
+  bool jump=false;
   if (c == true){
     switch(engine.lastKey.c){
       case 'k': kick=true; break;
       case 'b': backhand=true; break;
       case 'p': pound=true; break;
+      case 'j': jump=true; break;
       default:break;
     }
   }
@@ -136,6 +138,35 @@ void PlayerAi::update(Actor *owner) {
     }
     // add pound effect from ceiling
   }
+
+  if(jump==true){
+    // get exact location
+    int jx=0,jy=0;
+    int done=false;
+    while(!done){
+      TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
+      switch(lastKey.vk) {
+	case TCODK_UP : jy+=-1; break;
+	case TCODK_DOWN : jy+=1; break;
+	case TCODK_LEFT : jx+=-1; break;
+	case TCODK_RIGHT : jx+=1; break;
+	case TCODK_ENTER : done=true; break;
+	case TCODK_ESCAPE : return; break; // cancel turn
+	default: break;
+      }
+      engine.render();
+      TCODConsole::root->setChar(owner->x+jx, owner->y+jy, 'X');
+      TCODConsole::flush();
+    }
+    // location selected
+    // TODO: check if location is reachable ie walls cannot be there blocking access; but enemies can
+
+    engine.gameStatus=Engine::NEW_TURN;
+    aa->setAttackMode(JUMP);
+    moveOrAttack(owner, owner->x+jx, owner->y+jy);
+    aa->setAttackMode(PUNCH);
+  }
+
 
   // probabilistically update health
   if (engine.gameStatus==Engine::NEW_TURN){
