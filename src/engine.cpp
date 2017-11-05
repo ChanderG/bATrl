@@ -2,7 +2,7 @@
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight){
   TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
-  TCODConsole::initRoot(screenWidth, screenHeight, "libtcod C++ tutorial",false);
+  TCODConsole::initRoot(screenWidth, screenHeight, "b@rl",false);
 
   // create player
   player = new Actor(40,25,'B', "Batman", TCODColor::white);
@@ -22,6 +22,19 @@ Engine::~Engine() {
   actors.clearAndDelete();
   delete map;
   delete gui;
+}
+
+/*
+ * Show starting splash screen,
+ */
+void Engine::showSplashScreen(){
+
+  char title[] = "b@rl";
+  TCODConsole::root->print(screenWidth/2, screenHeight/4, title);
+  char msg[] = "Press any key to continue.";
+  TCODConsole::root->print(screenWidth/4, 3*screenHeight/4, msg);
+  TCODConsole::flush();
+  TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, NULL, NULL, false);
 }
 
 void Engine::update() {

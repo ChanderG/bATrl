@@ -25,6 +25,7 @@ class Engine {
 
     Engine(int screenWidth, int screenHeight);
     ~Engine();
+    void showSplashScreen();
     void update();
     void render();
     void sendToBack(Actor *actor);
