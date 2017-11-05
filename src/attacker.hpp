@@ -23,7 +23,8 @@ enum AgileAttack {
   DROP,
   BACKHAND,
   POUND,
-  JUMP
+  JUMP,
+  LAUNCH
 }; 
 
 class AgileAttacker : public Attacker {

@@ -31,6 +31,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
   powerMap[BACKHAND] = 5;
   powerMap[POUND] = 6;
   powerMap[JUMP] = 8;
+  powerMap[LAUNCH] = 8;
 
   msgMap[PUNCH] = "You punch";
   msgMap[KICK] = "You kick";
@@ -38,6 +39,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
   msgMap[BACKHAND] = "You backhand";
   msgMap[POUND] = "Your pound smacks";
   msgMap[JUMP] = "You jump into";
+  msgMap[LAUNCH] = "You launch into";
 
   setAttackMode(PUNCH);
 }
@@ -85,5 +87,20 @@ void AgileAttacker::postAttack(Actor *owner, Actor* target){
     // go to target location
     owner->x = target->x;
     owner->y = target->y;
+  }
+  else if (attackMode == LAUNCH){
+    // note down target location
+    int tx = target->x;
+    int ty = target->y;
+
+    // displace the target slightly
+    int effect = 1;
+    int dx = (owner->x > target->x) ? -1 : (owner->x < target->x) ? +1 : 0;
+    int dy = (owner->y > target->y) ? -1 : (owner->y < target->y) ? +1 : 0;
+    target->displace(dx*effect, dy*effect);
+
+    // also move into target location
+    owner->x = tx;
+    owner->y = ty;
   }
 }

@@ -33,12 +33,14 @@ void PlayerAi::update(Actor *owner) {
   bool backhand=false;
   bool pound=false;
   bool jump=false;
+  bool launch=false;
   if (c == true){
     switch(engine.lastKey.c){
       case 'k': kick=true; break;
       case 'b': backhand=true; break;
       case 'p': pound=true; break;
       case 'j': jump=true; break;
+      case 'l': launch=true; break;
       default:break;
     }
   }
@@ -139,7 +141,23 @@ void PlayerAi::update(Actor *owner) {
     // add pound effect from ceiling
   }
 
-  if(jump==true){
+  // verify if jump can be done
+  // not on floor; cannot jump attack
+  if (jump && !owner->z->onFloor){
+    engine.gui->message(TCODColor::red, "On ceiling; cannot jump.");
+    return;
+  }
+
+  // verify if launch can be done
+  // not on ceiling; cannot jump attack
+  if (launch && owner->z->onFloor){
+    engine.gui->message(TCODColor::red, "On floor; cannot launch.");
+    return;
+  }
+
+
+  // combined handler for jump and launch
+  if((jump==true)||(launch==true)){
     // get exact location
     int jx=0,jy=0;
     int done=false;
@@ -162,7 +180,12 @@ void PlayerAi::update(Actor *owner) {
     // TODO: check if location is reachable ie walls cannot be there blocking access; but enemies can
 
     engine.gameStatus=Engine::NEW_TURN;
-    aa->setAttackMode(JUMP);
+    if (jump==true)
+      aa->setAttackMode(JUMP);
+    else { // launch
+      aa->setAttackMode(LAUNCH);
+      toggleZStatus(owner);
+    }
     moveOrAttack(owner, owner->x+jx, owner->y+jy);
     aa->setAttackMode(PUNCH);
   }
