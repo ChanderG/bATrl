@@ -172,6 +172,19 @@ void PlayerAi::update(Actor *owner) {
 	case TCODK_ESCAPE : return; break; // cancel turn
 	default: break;
       }
+      // to prevent going through walls
+      if(engine.map->isWall(owner->x+jx, owner->y+jy)){
+	// undo
+	switch(lastKey.vk) {
+	  case TCODK_UP : jy+=+1; break;
+	  case TCODK_DOWN : jy+=-1; break;
+	  case TCODK_LEFT : jx+=+1; break;
+	  case TCODK_RIGHT : jx+=-1; break;
+	  default: break;
+	}
+	// skip round
+	continue;
+      }
       engine.render();
       TCODConsole::root->setChar(owner->x+jx, owner->y+jy, 'X');
       TCODConsole::flush();
