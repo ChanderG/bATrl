@@ -3,13 +3,18 @@
 #include "engine.hpp"
 
 #include "cstdio"
+#include "cmath"
 
 Actor::Actor(int x, int y, int ch, const char* name, const TCODColor &col ): x(x), y(y), ch(ch), col(col), name(name), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), z(NULL){
 }
 
 void Actor::render() const {
+  // player has full sense upto this distance
+  //if (sqrt((x-engine.player->x)*(x-engine.player->x) + (y-engine.player->y)*(y-engine.player->y)) < 10){
+  // normal render
   TCODConsole::root->setChar(x, y, ch);
   TCODConsole::root->setCharForeground(x,y,col);
+  //}
 }
 
 void Actor::update(){

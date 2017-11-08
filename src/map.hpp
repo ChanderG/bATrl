@@ -2,8 +2,8 @@
 #define MAP_H
 
 struct Tile {
-  bool canWalk; // can we walk through this tile?
-  Tile() : canWalk(false) {}
+  bool explored; // has the player already seen this tile ?
+  Tile() : explored(false) {}
 };
 
 class Map {
@@ -16,9 +16,13 @@ class Map {
     void render() const;
     bool canWalk(int x, int y) const;  
     void addMonster(int x, int y);
+    bool isInFov(int x, int y) const;
+    bool isExplored(int x, int y) const;
+    void computeFov();
 
   protected :
     Tile *tiles;
+    TCODMap *map;
     friend class BspListener;
 
     void dig(int x1, int y1, int x2, int y2);

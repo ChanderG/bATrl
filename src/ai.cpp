@@ -52,6 +52,7 @@ void PlayerAi::update(Actor *owner) {
   if (dx != 0 || dy != 0) {
     engine.gameStatus=Engine::NEW_TURN;
     moveOrAttack(owner, owner->x+dx,owner->y+dy);
+    engine.computeFov = true;
   }
 
   // linear change z level
@@ -158,6 +159,7 @@ void PlayerAi::update(Actor *owner) {
 
   // combined handler for jump and launch
   if((jump==true)||(launch==true)){
+    engine.computeFov = true;
     // get exact location
     int jx=0,jy=0;
     int done=false;
@@ -256,9 +258,10 @@ void MonsterAi::update(Actor *owner) {
   if ( owner->destructible && owner->destructible->isDead() ) {
     return;
   }
-  // only if player is on floor
-  if (engine.player->z->onFloor)
+  // only if player is on floor and in line of sight
+  if ((engine.player->z->onFloor) && engine.map->isInFov(owner->x,owner->y)) {
     moveOrAttack(owner, engine.player->x,engine.player->y);
+  }
 }
 
 void MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety) {

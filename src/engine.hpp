@@ -23,12 +23,16 @@ class Engine {
     TCOD_key_t lastKey;
     Gui *gui;
 
+    int fovRadius;
+    bool computeFov; // should we compute fov this turn
+
     Engine(int screenWidth, int screenHeight);
     ~Engine();
     void showSplashScreen();
     void update();
     void render();
     void sendToBack(Actor *actor);
+
 };
 
 extern Engine engine;

@@ -1,6 +1,6 @@
 #include "engine.hpp"
 
-Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight){
+Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight), fovRadius(6), computeFov(true){
   TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
   TCODConsole::initRoot(screenWidth, screenHeight, "b@rl",false);
 
@@ -43,6 +43,11 @@ void Engine::update() {
   TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
   player->update();
 
+  if(computeFov){
+    map->computeFov();
+    computeFov=false;
+  }
+
   if ( gameStatus == NEW_TURN ) {
     for (Actor **iterator=actors.begin(); iterator != actors.end();
 	iterator++) {
@@ -61,7 +66,10 @@ void Engine::render() {
   map->render();
   // draw the actors
   for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
-    (*iterator)->render();
+    Actor *actor=*iterator;
+    if ( map->isInFov(actor->x,actor->y) ) {
+      actor->render();
+    }
   }
   // show the player's stats
   gui->render();
