@@ -17,6 +17,7 @@ class Map {
     bool canWalk(int x, int y) const;  
     void addMonster(int x, int y);
     bool isInFov(int x, int y) const;
+    bool isInFoa(int x, int y) const;
     bool isExplored(int x, int y) const;
     void computeFov();
 

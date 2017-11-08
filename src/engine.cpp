@@ -1,6 +1,6 @@
 #include "engine.hpp"
 
-Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight), fovRadius(6), computeFov(true){
+Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), screenWidth(screenWidth), screenHeight(screenHeight), fovRadius(6), foaRadius(10), computeFov(true){
   TCODConsole::setCustomFont("terminal.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
   TCODConsole::initRoot(screenWidth, screenHeight, "b@rl",false);
 
@@ -67,7 +67,8 @@ void Engine::render() {
   // draw the actors
   for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
     Actor *actor=*iterator;
-    if ( map->isInFov(actor->x,actor->y) ) {
+    // audio field is larger than the vision field
+    if ( map->isInFoa(actor->x,actor->y) ) {
       actor->render();
     }
   }

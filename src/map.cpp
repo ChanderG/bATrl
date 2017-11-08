@@ -2,6 +2,8 @@
 #include "map.hpp"
 #include "engine.hpp"
 
+#include <cmath>
+
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 5;
@@ -72,22 +74,40 @@ bool Map::isInFov(int x, int y) const {
   return false;
 }
 
+// field of auditory sense, ONLY for the b@
+// simple circular area
+// calculated as required
+bool Map::isInFoa(int x, int y) const {
+  if (sqrt((x-engine.player->x)*(x-engine.player->x) + (y-engine.player->y)*(y-engine.player->y)) < engine.foaRadius){
+    return true;
+  }
+  return false;
+}
+
 void Map::computeFov() {
   map->computeFov(engine.player->x,engine.player->y,
       engine.fovRadius);
 }
 
 void Map::render() const {
+  // out of field of sense
   static const TCODColor darkWall(0,0,100);
   static const TCODColor darkGround(50,50,150);
+  // vision sense colors
   static const TCODColor lightWall(130,110,50);
   static const TCODColor lightGround(200,180,50);
+  // audio sense colors
+  static const TCODColor asWall(0,100,50);
+  static const TCODColor asGround(50,100,100);
 
   for (int x=0; x < width; x++) {
     for (int y=0; y < height; y++) {
       if ( isInFov(x,y) ) {
 	TCODConsole::root->setCharBackground(x,y,
 	    isWall(x,y) ? lightWall :lightGround );
+      } else if ( isInFoa(x,y) ) {
+	TCODConsole::root->setCharBackground(x,y,
+	    isWall(x,y) ? asWall : asGround );
       } else if ( isExplored(x,y) ) {
 	TCODConsole::root->setCharBackground(x,y,
 	    isWall(x,y) ? darkWall : darkGround );

@@ -24,6 +24,7 @@ class Engine {
     Gui *gui;
 
     int fovRadius;
+    int foaRadius;
     bool computeFov; // should we compute fov this turn
 
     Engine(int screenWidth, int screenHeight);
