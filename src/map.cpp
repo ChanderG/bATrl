@@ -91,14 +91,14 @@ void Map::computeFov() {
 
 void Map::render() const {
   // out of field of sense
-  static const TCODColor darkWall(0,0,100);
-  static const TCODColor darkGround(50,50,150);
+  static const TCODColor darkWall(50,50,50);
+  static const TCODColor darkGround(100,100,100);
   // vision sense colors
-  static const TCODColor lightWall(130,110,50);
-  static const TCODColor lightGround(200,180,50);
+  static const TCODColor lightWall(65,65,65);
+  static const TCODColor lightGround(135,135,135);
   // audio sense colors
-  static const TCODColor asWall(0,100,50);
-  static const TCODColor asGround(50,100,100);
+  static const TCODColor asWall(0,50,100);
+  static const TCODColor asGround(50,100,150);
 
   for (int x=0; x < width; x++) {
     for (int y=0; y < height; y++) {
