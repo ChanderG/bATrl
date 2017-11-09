@@ -29,18 +29,14 @@ void PlayerAi::update(Actor *owner) {
   }
 
   // handle char keys
-  bool kick=false;
-  bool backhand=false;
-  bool pound=false;
-  bool jump=false;
-  bool launch=false;
+  AgileAttack mode = NONE;
   if (c == true){
     switch(engine.lastKey.c){
-      case 'k': kick=true; break;
-      case 'b': backhand=true; break;
-      case 'p': pound=true; break;
-      case 'j': jump=true; break;
-      case 'l': launch=true; break;
+      case 'k': mode=KICK; break;
+      case 'b': mode=BACKHAND; break;
+      case 'p': mode=POUND; break;
+      case 'j': mode=JUMP; break;
+      case 'l': mode=LAUNCH; break;
       default:break;
     }
   }
@@ -53,6 +49,10 @@ void PlayerAi::update(Actor *owner) {
     engine.gameStatus=Engine::NEW_TURN;
     moveOrAttack(owner, owner->x+dx,owner->y+dy);
     engine.computeFov = true;
+    // also update impulse
+    aa->healImpulse();
+    update_health(owner);
+    return;
   }
 
   // linear change z level
@@ -65,11 +65,20 @@ void PlayerAi::update(Actor *owner) {
       moveOrAttack(owner, owner->x+dx,owner->y+dy);
       aa->setAttackMode(PUNCH);
     }
+    update_health(owner);
+    // also update impulse
+    aa->healImpulse();
+    return;
+  }
+
+  if (!aa->canAttack(mode)) {
+    engine.gui->message(TCODColor::red, "You are too tired to do that.");
+    return;
   }
 
   TCOD_key_t lastKey;
   // handle kick command
-  if (kick == true) {
+  if (mode == KICK) {
     // get kick direction
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
     switch(lastKey.vk) {
@@ -83,13 +92,14 @@ void PlayerAi::update(Actor *owner) {
     engine.gameStatus=Engine::NEW_TURN;
     if (owner->z->onFloor) {
       aa->setAttackMode(KICK);
+      aa->processImpulseCost();
       moveOrAttack(owner, owner->x+dx,owner->y+dy);
       aa->setAttackMode(PUNCH);
     }
   }
 
   // Backhand the 2 locations to the left and right behind you
-  if(backhand==true){
+  if(mode == BACKHAND){
     // get direction you are facing
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
     switch(lastKey.vk) {
@@ -103,6 +113,7 @@ void PlayerAi::update(Actor *owner) {
     engine.gameStatus=Engine::NEW_TURN;
     if (owner->z->onFloor) {
       aa->setAttackMode(BACKHAND);
+      aa->processImpulseCost();
       // save owner location
       int x = owner->x; int y = owner->y;
       // Backhand the 2 locations behind this direction
@@ -123,13 +134,15 @@ void PlayerAi::update(Actor *owner) {
     }
   }
 
-  if(pound==true){
+  if(mode == POUND){
     engine.gameStatus=Engine::NEW_TURN;
     // save owner location
     int x = owner->x;
     int y = owner->y;
     if (owner->z->onFloor) {
       aa->setAttackMode(POUND);
+      aa->processImpulseCost();
+      // actual attacks
       for(int ix=-1;ix<=1;ix++)
 	for(int iy=-1;iy<=1;iy++){
 	  if(moveOrAttack(owner, owner->x+ix,owner->y+iy)){
@@ -144,21 +157,21 @@ void PlayerAi::update(Actor *owner) {
 
   // verify if jump can be done
   // not on floor; cannot jump attack
-  if (jump && !owner->z->onFloor){
+  if (mode==JUMP && !owner->z->onFloor){
     engine.gui->message(TCODColor::red, "On ceiling; cannot jump.");
     return;
   }
 
   // verify if launch can be done
   // not on ceiling; cannot jump attack
-  if (launch && owner->z->onFloor){
+  if (mode==LAUNCH && owner->z->onFloor){
     engine.gui->message(TCODColor::red, "On floor; cannot launch.");
     return;
   }
 
 
   // combined handler for jump and launch
-  if((jump==true)||(launch==true)){
+  if((mode==JUMP)||(mode==LAUNCH)){
     engine.computeFov = true;
     // get exact location
     int jx=0,jy=0;
@@ -195,27 +208,31 @@ void PlayerAi::update(Actor *owner) {
     // TODO: check if location is reachable ie walls cannot be there blocking access; but enemies can
 
     engine.gameStatus=Engine::NEW_TURN;
-    if (jump==true)
+    if (mode == JUMP){
       aa->setAttackMode(JUMP);
+      aa->processImpulseCost();
+    }
     else { // launch
       aa->setAttackMode(LAUNCH);
+      aa->processImpulseCost();
       toggleZStatus(owner);
     }
     moveOrAttack(owner, owner->x+jx, owner->y+jy);
     aa->setAttackMode(PUNCH);
   }
 
+  update_health(owner);
+}
 
-  // probabilistically update health
-  if (engine.gameStatus==Engine::NEW_TURN){
-    TCODRandom *rng=TCODRandom::getInstance();
-    int h=rng->getInt(0, PLAYER_HEAL_ODDS);
-    if(h==0){
-      if (owner->destructible->hp + PLAYER_HEAL_AMT <= owner->destructible->maxHp){
-	owner->destructible->hp += PLAYER_HEAL_AMT;
-      } else {
-	owner->destructible->hp = owner->destructible->maxHp;
-      }
+// probabilistically update health
+void PlayerAi::update_health(Actor *owner){
+  TCODRandom *rng=TCODRandom::getInstance();
+  int h=rng->getInt(0, PLAYER_HEAL_ODDS);
+  if(h==0){
+    if (owner->destructible->hp + PLAYER_HEAL_AMT <= owner->destructible->maxHp){
+      owner->destructible->hp += PLAYER_HEAL_AMT;
+    } else {
+      owner->destructible->hp = owner->destructible->maxHp;
     }
   }
 }

@@ -17,6 +17,7 @@ public :
 protected :
    bool moveOrAttack(Actor *owner, int targetx, int targety);
    void toggleZStatus(Actor *owner);
+   void update_health(Actor *owner);
 };
 
 class MonsterAi : public Ai {

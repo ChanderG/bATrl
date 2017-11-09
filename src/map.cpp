@@ -176,14 +176,14 @@ void Map::addMonster(int x, int y){
     // create a thug
     Actor *thug = new Actor(x,y,'t',"thug", TCODColor::desaturatedGreen);
     thug->destructible = new MonsterDestructible(10,0,"unconcious thug");
-    thug->attacker = new Attacker(1);
+    thug->attacker = new Attacker(2);
     thug->ai = new MonsterAi();
     engine.actors.push(thug);
   } else {
     // create a gangster
     Actor *gangster = new Actor(x,y,'g',"gangster", TCODColor::darkerGreen);
     gangster->destructible = new MonsterDestructible(16,1,"passed out gangster");
-    gangster->attacker = new Attacker(4);
+    gangster->attacker = new Attacker(6);
     gangster->ai = new MonsterAi();
     engine.actors.push(gangster);
   }

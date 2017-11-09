@@ -18,6 +18,7 @@ public :
 };
 
 enum AgileAttack {
+  NONE,
   PUNCH,
   KICK,
   DROP,
@@ -30,13 +31,20 @@ enum AgileAttack {
 class AgileAttacker : public Attacker {
   public:
     std::map<AgileAttack, float> powerMap; // capability of each attack
-    std::map<AgileAttack, std::string> msgMap; // capability of each attack
-    AgileAttack attackMode;
+    std::map<AgileAttack, std::string> msgMap; // message displayed for each attack
+    AgileAttack attackMode; // current attack mode
+    
+    float maxImpulse;
+    float currentImpulse;
+    std::map<AgileAttack, float> impulseMap; // implulse required for each attack
 
     AgileAttacker();
     void setAttackMode(AgileAttack mode);  // set attack mode for the next attack
     void attack(Actor *owner, Actor *target);
-    void postAttack(Actor *owner, Actor *target);
+    void postAttack(Actor *owner, Actor *target); // post attack effects
+    bool canAttack(AgileAttack mode); // can we use mode attack at current impulse levels?
+    void healImpulse(); // restore impulse levels
+    void processImpulseCost(); // account impulse costs
 };
 
 #endif

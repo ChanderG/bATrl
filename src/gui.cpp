@@ -26,6 +26,11 @@ void Gui::render() {
   renderBar(1,1,BAR_WIDTH,"HP",engine.player->destructible->hp,
       engine.player->destructible->maxHp,
       TCODColor::lightRed,TCODColor::darkerRed);
+  // draw the impulse bar
+  renderBar(1,2,BAR_WIDTH,"IMPULSE",
+      ((AgileAttacker*)(engine.player->attacker))->currentImpulse,
+      ((AgileAttacker*)(engine.player->attacker))->maxImpulse,
+      TCODColor::lightBlue,TCODColor::darkerBlue);
   // draw the message log
   int y=1;
   float colorCoef=0.4f;

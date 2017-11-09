@@ -3,7 +3,7 @@
 Batman based roguelike focused primarily on combat. WIP. More details soon.
 
 ## About the name
-A play on how @ is pronounced 'at' and also traditionally used to represent the main character in roguelikes.
+A play on how @ is pronounced 'at' and also traditionally used to represent the main character in roguelikes (the 'man' portion if you will).
 
 ## Font
 Currently setup with terminal16x16_gs_ro. Best sizes etc.
