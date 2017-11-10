@@ -6,7 +6,7 @@
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
-static const int MAX_ROOM_MONSTERS = 5;
+static const int MAX_ROOM_MONSTERS = 8;
 
 // BSP Listener implementation
 class BspListener : public ITCODBspCallback {
@@ -176,14 +176,14 @@ void Map::addMonster(int x, int y){
     // create a thug
     Actor *thug = new Actor(x,y,'t',"thug", TCODColor::desaturatedGreen);
     thug->destructible = new MonsterDestructible(10,0,"unconcious thug");
-    thug->attacker = new Attacker(2);
+    thug->attacker = new Attacker(3);
     thug->ai = new MonsterAi();
     engine.actors.push(thug);
   } else {
     // create a gangster
     Actor *gangster = new Actor(x,y,'g',"gangster", TCODColor::darkerGreen);
-    gangster->destructible = new MonsterDestructible(16,1,"passed out gangster");
-    gangster->attacker = new Attacker(6);
+    gangster->destructible = new MonsterDestructible(20,1,"passed out gangster");
+    gangster->attacker = new Attacker(5);
     gangster->ai = new MonsterAi();
     engine.actors.push(gangster);
   }
