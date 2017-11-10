@@ -1,0 +1,81 @@
+Enemy AI:
+=========
+
+Senses:
+vision, sound,
+	vision -> can be piggy backed from user vision
+	sound -> attracted to combat or things falling etc
+
+Effects:
+Confusion -> flail around or miss attacks
+Fallen -> just fall and take time to get up
+Afraid -> Run in the opposite direction
+Startled -> Lose turn due to sudden appearance of the b@
+Miss -> When you move fast, they miss attacks -> such as jumping causes ranged attackers to miss
+
+Intents:
+Attack -> player enters line of sight in the distance
+Call out -> in case of evidence, seeing the player, large sound events to warn allies
+Investigate -> towards sound events (can be ongoing combat, an ally calling out upon seeing the b@, other sounds like the b@ throwing something near them)
+Patrol -> walk between 2 predefined points with gaps
+Chatting -> bunch of units standing next to one another
+Effects -> on being hit by the player
+
+Enemy types:
+============
+Enemy weapons / gun toting villains
+Enemy uniques
+More Enemy type names: henchmen
+
+Attacks:
+========
+Silent Takedown (depends on enemy awareness, turn/impulse management)
+Inverted Takedown (How to pull this off?)
+Attack for 2 opposing sides. (left and right)
+Melee attack with varying effects (such as enemy falling down, confusion for short duration)
+Ex: flip attack, lay down 1 enemy to (like /). Next turn is spent by enemy getting up.
+Probabilistically run these effects when you attack people.
+Stun charge shooter in combat
+Probabilistic attack power
+
+Jump : provide target location
+Launch/Jump/Glide improvement:
+1. Limit max dx/dy to some cap (3/9)
+Drop causes more damage than launch.
+
+Movement:
+========
+Wall/Ceiling action:
+1. Adj to wall => less/zero impulse consumption + can use batarangs and other equipment
+(meaning more stability)
+2. Else, higher impulse consumption but can drop. Cant fire etc. You need both hands to hold on to the ceiling. Can't really launch -> need to angle etc.
+
+
+
+New Attack Dimensions:
+======================
+Batarangs (auto/manual target, inventory mgmt, electric version, relation to noise metric, sonar version, remote control version)
+Explosive Gel (manual trigger, proximity trigger)
+BatClaw -> grab and pull enemies/things from afar
+Ultra BatClaw -> pull large objects and weak sections off walls
+Line launcher -> travel across regions
+
+Better level design:
+====================
+Objects/Environment that interfere with vision and can be used to affect sound and direct debris attack. Stealth play boost.
+Larger levels to get the feel.
+Missing sections/Corridors to actually use launch/line launchers and strats like enemy boxing.
+Larger rooms with walls/pillers in between
+Object with inherent height properties
+
+Large scale map / plan:
+=======================
+Each minigame is inside a building etc. Can roam inside a city in overview mode.
+You have some equipment you can load up when you go in / or at select floors 
+(large veranda's where you can call in a rocket of supplies)
+Hostage/Innocent people presence can motivate why you need bash every guy down -> hostage needs to get out that way.
+
+Player Constraints
+==================
+Items available for mission
+Hostage/Innocent situation -> limits the kind of attacks used
