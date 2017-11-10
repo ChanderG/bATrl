@@ -168,6 +168,11 @@ void PlayerAi::update(Actor *owner) {
     engine.gui->message(TCODColor::red, "On floor; cannot launch.");
     return;
   }
+  // cannot launch from unstable location
+  else if (mode==LAUNCH && !owner->z->isStable(owner)){
+    engine.gui->message(TCODColor::red, "Need stable location to launch from.");
+    return;
+  }
 
 
   // combined handler for jump and launch
