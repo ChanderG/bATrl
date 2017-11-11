@@ -4,7 +4,7 @@
 
 #include "cstdio"
 
-Actor::Actor(int x, int y, int ch, const char* name, const TCODColor &col ): x(x), y(y), ch(ch), col(col), name(name), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), z(NULL){
+Actor::Actor(int x, int y, int ch, const char* name, const TCODColor &col ): x(x), y(y), ch(ch), col(col), bgcol(TCODColor::black), name(name), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), z(NULL){
 }
 
 void Actor::render() const {
@@ -12,8 +12,8 @@ void Actor::render() const {
   // normal render
   TCODConsole::root->setChar(x, y, ch);
   TCODConsole::root->setCharForeground(x,y,col);
-  //}
-  }
+  TCODConsole::root->setCharBackground(x,y,bgcol);
+}
 
 void Actor::update(){
   if (ai) ai->update(this);

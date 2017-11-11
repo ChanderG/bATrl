@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 
+#include "enum.hpp"
 #include "actor.hpp"
 class Actor;
 
@@ -16,17 +17,6 @@ public :
    Attacker(); // empty constructor for children class use
    void attack(Actor *owner, Actor *target);
 };
-
-enum AgileAttack {
-  NONE,
-  PUNCH,
-  KICK,
-  DROP,
-  BACKHAND,
-  POUND,
-  JUMP,
-  LAUNCH
-}; 
 
 class AgileAttacker : public Attacker {
   public:

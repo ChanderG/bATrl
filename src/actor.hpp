@@ -17,6 +17,7 @@ class Actor {
     int x,y; // position
     int ch;  // code repn the actor
     TCODColor col; // col of character
+    TCODColor bgcol; // bg color used to show effects
     const char* name;
     bool blocks;
     Attacker *attacker; // something that deals damage

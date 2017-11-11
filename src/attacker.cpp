@@ -69,6 +69,8 @@ void AgileAttacker::attack(Actor *owner, Actor *target) {
   Attacker::attack(owner, target);
   // post attack processing
   postAttack(owner, target);
+  // phsyiological impact on target
+  ((MonsterAi*)(target->ai))->phys->update_external_attack(target, attackMode);
 }
 
 /*

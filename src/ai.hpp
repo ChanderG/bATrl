@@ -3,6 +3,9 @@
 
 #include "actor.hpp"
 #include "engine.hpp"
+#include "physiology.hpp"
+
+class Physiology;
 
 class Ai {
 public :
@@ -22,9 +25,9 @@ protected :
 
 class MonsterAi : public Ai {
 public :
+   MonsterAi();
    void update(Actor *owner);
-
-protected :
+   Physiology *phys;
    void moveOrAttack(Actor *owner, int targetx, int targety);
 };
 
