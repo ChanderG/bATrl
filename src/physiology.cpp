@@ -129,6 +129,26 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 		   // no other effects
 		   break;
 		 }
+
+    case FLIP: {
+		 int chance = rng->getInt(0,100);
+		 // 75 % chance of getting stunned for 5 turns
+		 if(chance < 75){
+		   currPhysState = STUNNED;
+		   currStateTimeout = 6;
+		   render_phys_state(owner);
+		 }
+		 // 20% chance of getting stunned for 2 turns
+		 else if (chance < 95) {
+		   currPhysState = STUNNED;
+		   currStateTimeout = 3;
+		   render_phys_state(owner);
+		 }
+		 // 5% chance of failing
+		 // no other effects
+		 break;
+	       }
+
     default: break;
 
   }

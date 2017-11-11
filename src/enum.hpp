@@ -5,6 +5,16 @@
 
 // Enum definittions
 
+/*
+ * The attacks have varying impact on HP. But more importantly, they have varying effects
+ * such as Area of Effect, Displacing the enemy and other enemy physiological effects.
+ *
+ * Also planned are varying enemy types that have varying response to attacks - for example,
+ * some attacks aimed towards peeling of armour from enemy, some designed to disarm enemies
+ * etc.
+ *
+ * The physiological responses are captured in physiology.cpp whereas the hp damage is captured in attacker.cpp.
+ */
 enum AgileAttack {
   NONE,
   PUNCH,
@@ -13,7 +23,8 @@ enum AgileAttack {
   BACKHAND,
   POUND,
   JUMP,
-  LAUNCH
+  LAUNCH,
+  FLIP
 }; 
 
 /*

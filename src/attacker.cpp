@@ -35,6 +35,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
   powerMap[POUND] = 6;
   powerMap[JUMP] = 8;
   powerMap[LAUNCH] = 8;
+  powerMap[FLIP] = 4;
 
   msgMap[PUNCH] = "You punch";
   msgMap[KICK] = "You kick";
@@ -43,6 +44,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
   msgMap[POUND] = "Your pound smacks";
   msgMap[JUMP] = "You jump into";
   msgMap[LAUNCH] = "You launch into";
+  msgMap[FLIP] = "You flip";
 
   maxImpulse = 30;
   currentImpulse = maxImpulse;
@@ -54,6 +56,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
   impulseMap[POUND] = 12;
   impulseMap[JUMP] = 3;
   impulseMap[LAUNCH] = 2;
+  impulseMap[FLIP] = 1;
 
   setAttackMode(PUNCH);
 }

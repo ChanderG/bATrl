@@ -36,6 +36,7 @@ void PlayerAi::update(Actor *owner) {
       case 'p': mode=POUND; break;
       case 'j': mode=JUMP; break;
       case 'l': mode=LAUNCH; break;
+      case 'f': mode=FLIP; break;
       default:break;
     }
   }
@@ -72,8 +73,19 @@ void PlayerAi::update(Actor *owner) {
     return;
   }
 
+  /*
+   * Handle other actions here.
+   */
+
+  // All agile attacks handled here
   if (!aa->canAttack(mode)) {
     engine.gui->message(TCODColor::red, "You are too tired to do that.");
+    return;
+  }
+
+  // disallow non ceiling attacks
+  if (!owner->z->onFloor && mode!=LAUNCH) {
+    engine.gui->message(TCODColor::red, "You are on the ceiling; can't really do that.");
     return;
   }
 
@@ -91,12 +103,10 @@ void PlayerAi::update(Actor *owner) {
     }
 
     engine.gameStatus=Engine::NEW_TURN;
-    if (owner->z->onFloor) {
-      aa->setAttackMode(KICK);
-      aa->processImpulseCost();
-      moveOrAttack(owner, owner->x+dx,owner->y+dy);
-      aa->setAttackMode(PUNCH);
-    }
+    aa->setAttackMode(KICK);
+    aa->processImpulseCost();
+    moveOrAttack(owner, owner->x+dx,owner->y+dy);
+    aa->setAttackMode(PUNCH);
   }
 
   // Backhand the 2 locations to the left and right behind you
@@ -112,27 +122,25 @@ void PlayerAi::update(Actor *owner) {
     }
 
     engine.gameStatus=Engine::NEW_TURN;
-    if (owner->z->onFloor) {
-      aa->setAttackMode(BACKHAND);
-      aa->processImpulseCost();
-      // save owner location
-      int x = owner->x; int y = owner->y;
-      // Backhand the 2 locations behind this direction
-      // reset location after every attack
-      if(dx==0){
-	moveOrAttack(owner, owner->x+1,owner->y-dy);
-	owner->x=x; owner->y=y;
-	moveOrAttack(owner, owner->x-1,owner->y-dy);
-	owner->x=x; owner->y=y;
-      } else if(dy==0){
-	moveOrAttack(owner, owner->x-dx,owner->y+1);
-	owner->x=x; owner->y=y;
-	moveOrAttack(owner, owner->x-dx,owner->y-1);
-	owner->x=x; owner->y=y;
-      }
-      // handle diagonal cases eventually
-      aa->setAttackMode(PUNCH);
+    aa->setAttackMode(BACKHAND);
+    aa->processImpulseCost();
+    // save owner location
+    int x = owner->x; int y = owner->y;
+    // Backhand the 2 locations behind this direction
+    // reset location after every attack
+    if(dx==0){
+      moveOrAttack(owner, owner->x+1,owner->y-dy);
+      owner->x=x; owner->y=y;
+      moveOrAttack(owner, owner->x-1,owner->y-dy);
+      owner->x=x; owner->y=y;
+    } else if(dy==0){
+      moveOrAttack(owner, owner->x-dx,owner->y+1);
+      owner->x=x; owner->y=y;
+      moveOrAttack(owner, owner->x-dx,owner->y-1);
+      owner->x=x; owner->y=y;
     }
+    // handle diagonal cases eventually
+    aa->setAttackMode(PUNCH);
   }
 
   if(mode == POUND){
@@ -140,27 +148,18 @@ void PlayerAi::update(Actor *owner) {
     // save owner location
     int x = owner->x;
     int y = owner->y;
-    if (owner->z->onFloor) {
-      aa->setAttackMode(POUND);
-      aa->processImpulseCost();
-      // actual attacks
-      for(int ix=-1;ix<=1;ix++)
-	for(int iy=-1;iy<=1;iy++){
-	  if(moveOrAttack(owner, owner->x+ix,owner->y+iy)){
-	    // if true -> we were moved ->take us back to center
-	    owner->x=x; owner->y=y;
-	  }
+    aa->setAttackMode(POUND);
+    aa->processImpulseCost();
+    // actual attacks
+    for(int ix=-1;ix<=1;ix++)
+      for(int iy=-1;iy<=1;iy++){
+	if(moveOrAttack(owner, owner->x+ix,owner->y+iy)){
+	  // if true -> we were moved ->take us back to center
+	  owner->x=x; owner->y=y;
 	}
-      aa->setAttackMode(PUNCH);
-    }
+      }
+    aa->setAttackMode(PUNCH);
     // add pound effect from ceiling
-  }
-
-  // verify if jump can be done
-  // not on floor; cannot jump attack
-  if (mode==JUMP && !owner->z->onFloor){
-    engine.gui->message(TCODColor::red, "On ceiling; cannot jump.");
-    return;
   }
 
   // verify if launch can be done
@@ -224,6 +223,25 @@ void PlayerAi::update(Actor *owner) {
       toggleZStatus(owner);
     }
     moveOrAttack(owner, owner->x+jx, owner->y+jy);
+    aa->setAttackMode(PUNCH);
+  }
+
+  // handle flip command
+  if (mode == FLIP) {
+    // get flip direction
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL, false);
+    switch(lastKey.vk) {
+      case TCODK_UP : dy=-1; break;
+      case TCODK_DOWN : dy=1; break;
+      case TCODK_LEFT : dx=-1; break;
+      case TCODK_RIGHT : dx=1; break;
+      default: break;
+    }
+
+    engine.gameStatus=Engine::NEW_TURN;
+    aa->setAttackMode(FLIP);
+    aa->processImpulseCost();
+    moveOrAttack(owner, owner->x+dx,owner->y+dy);
     aa->setAttackMode(PUNCH);
   }
 
