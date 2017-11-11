@@ -25,7 +25,21 @@ enum AgileAttack {
   JUMP,
   LAUNCH,
   FLIP
-}; 
+};
+
+/* Messages list
+ * Random strings that can be used to keep it interesting.
+ * The corresponding size needs to be set correctly.
+ */
+const std::string AgileAttackCeilingCancelMessages[] = {
+  						 "You attack the air.",
+						 "What are you doing, Master Wayne?",
+						 "Did you see a spider, Master Wayne?",
+						 "I need to be careful when practicing midair.",
+						 "You are on the ceiling; can't really do that.",
+						 "I need to focus on the task at hand."
+};
+const int AgileAttackCeilingCancelMessagesSize = 6;
 
 /*
  * Physiological states planned

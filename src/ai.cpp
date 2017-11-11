@@ -9,6 +9,8 @@ PlayerAi::PlayerAi(){
 }
 
 void PlayerAi::update(Actor *owner) {
+  TCODRandom *rng=TCODRandom::getInstance();
+
   if ( owner->destructible && owner->destructible->isDead() ) {
     return;
   }
@@ -85,7 +87,7 @@ void PlayerAi::update(Actor *owner) {
 
   // disallow non ceiling attacks
   if (!owner->z->onFloor && mode!=LAUNCH) {
-    engine.gui->message(TCODColor::red, "You are on the ceiling; can't really do that.");
+    engine.gui->message(TCODColor::red, AgileAttackCeilingCancelMessages[rng->getInt(0, AgileAttackCeilingCancelMessagesSize-1)].c_str());
     return;
   }
 
