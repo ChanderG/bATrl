@@ -61,6 +61,8 @@ void PlayerAi::update(Actor *owner) {
     // attack a creature if exists in this cell
     if (owner->z->onFloor) {
       aa->setAttackMode(DROP);
+      // kinda hacky: don't really check for affordability -> just do it
+      aa->processImpulseCost();
       moveOrAttack(owner, owner->x+dx,owner->y+dy);
       aa->setAttackMode(PUNCH);
     }

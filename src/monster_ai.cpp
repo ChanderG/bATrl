@@ -14,6 +14,9 @@ MonsterAi::MonsterAi() {
  */
 void MonsterAi::update(Actor *owner) {
   if ( owner->destructible && owner->destructible->isDead() ) {
+    // remove all physiological effects
+    phys->currPhysState = NORMAL;
+    phys->render_phys_state(owner);
     return;
   }
   // update physiological effects

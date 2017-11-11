@@ -49,7 +49,7 @@ AgileAttacker::AgileAttacker() : Attacker::Attacker() {
 
   impulseMap[PUNCH] = 0;
   impulseMap[KICK] = 2;
-  impulseMap[DROP] = 0;
+  impulseMap[DROP] = 2;
   impulseMap[BACKHAND] = 0;
   impulseMap[POUND] = 12;
   impulseMap[JUMP] = 3;

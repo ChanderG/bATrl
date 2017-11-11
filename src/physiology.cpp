@@ -52,10 +52,10 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 
     case KICK: {
 		 int chance = rng->getInt(0,100);
-		 // 15 % chance of getting stunned for 2 turns
-		 if(chance < 15){
+		 // 30% chance of getting stunned for 3 turns
+		 if(chance < 30){
 		   currPhysState = STUNNED;
-		   currStateTimeout = 3;
+		   currStateTimeout = 4;
 		   render_phys_state(owner);
 		 }
 		 // no other effects
@@ -64,10 +64,10 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 
     case DROP: {
 		 int chance = rng->getInt(0,100);
-		 // 15 % chance of getting stunned for 2 turn
-		 if(chance < 15){
+		 // 30 % chance of getting stunned for 4 turn
+		 if(chance < 30){
 		   currPhysState = STUNNED;
-		   currStateTimeout = 3;
+		   currStateTimeout = 5;
 		   render_phys_state(owner);
 		 }
 		 // no other effects
@@ -84,16 +84,16 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 		    currStateTimeout = 4;
 		    render_phys_state(owner);
 		  }
-		  // 5% chance of getting confused for 2 turns
-		  else if(chance < 10){
+		  // 25% chance of getting confused for 2 turns
+		  else if(chance < 30){
 		    currPhysState = CONFUSED;
 		    currStateTimeout = 3;
 		    render_phys_state(owner);
 		  }
-		  // 5% chance of getting afraid for 2 turns
-		  else if(chance < 15){
+		  // 10% chance of getting afraid for 5 turns
+		  else if(chance < 40){
 		    currPhysState = AFRAID;
-		    currStateTimeout = 3;
+		    currStateTimeout = 6;
 		    render_phys_state(owner);
 		  }
 		  // no other effects
@@ -102,8 +102,8 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 
     case JUMP: {
 		 int chance = rng->getInt(0,100);
-		 // 10 % chance of getting stunned for 2 turns
-		 if(chance < 10){
+		 // 20 % chance of getting stunned for 2 turns
+		 if(chance < 20){
 		   currPhysState = STUNNED;
 		   currStateTimeout = 3;
 		   render_phys_state(owner);
@@ -114,14 +114,14 @@ void Physiology::update_external_attack(Actor* owner, AgileAttack mode){
 
     case LAUNCH: {
 		   int chance = rng->getInt(0,100);
-		   // 5% chance of getting stunned for 2 turns
-		   if(chance < 5){
+		   // 30% chance of getting stunned for 3 turns
+		   if(chance < 30){
 		     currPhysState = STUNNED;
-		     currStateTimeout = 3;
+		     currStateTimeout = 4;
 		     render_phys_state(owner);
 		   }
 		   // 5% chance of getting afraid for 2 turns
-		   else if(chance < 10){
+		   else if(chance < 35){
 		     currPhysState = AFRAID;
 		     currStateTimeout = 3;
 		     render_phys_state(owner);
