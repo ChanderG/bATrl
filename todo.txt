@@ -1,17 +1,18 @@
 Enemy AI:
 =========
 
-Senses:
-vision, sound,
-	vision -> can be piggy backed from user vision
-	sound -> attracted to combat or things falling etc
-
-Effects:
+Effects/State:
 Confusion -> flail around or miss attacks
 Fallen -> just fall and take time to get up
+Stunned -> just stand there
 Afraid -> Run in the opposite direction
 Startled -> Lose turn due to sudden appearance of the b@
 Miss -> When you move fast, they miss attacks -> such as jumping causes ranged attackers to miss
+(DONE)
+
+Senses:
+	vision -> can be piggy backed from user vision(DONE)
+	sound -> attracted to combat or things falling etc
 
 Intents:
 Attack -> player enters line of sight in the distance
@@ -19,13 +20,21 @@ Call out -> in case of evidence, seeing the player, large sound events to warn a
 Investigate -> towards sound events (can be ongoing combat, an ally calling out upon seeing the b@, other sounds like the b@ throwing something near them)
 Patrol -> walk between 2 predefined points with gaps
 Chatting -> bunch of units standing next to one another
-Effects -> on being hit by the player
+Guard -> a single location/actor
+Follow -> another actor at a predefied distance
+Protect -> another actor at predefined distance
+Overwhelmed -> suffering 1 of the effects and cannot temporarily do the intent
 
 Enemy types:
 ============
 Enemy weapons / gun toting villains
 Enemy uniques
 More Enemy type names: henchmen
+Enemy equipment: thermal imaging headsets -> can see b@ on the rafters
+Armored guys -> need special attack to take them down (RAID - rapid array of inexpensive blows )
+(Possible D term -> Decks, 
+Sonar jammer -> the b@'s sonar is affected
+hields
 
 Attacks:
 ========
@@ -33,10 +42,11 @@ Silent Takedown (depends on enemy awareness, turn/impulse management)
 Inverted Takedown (How to pull this off?)
 Attack for 2 opposing sides. (left and right)
 Melee attack with varying effects (such as enemy falling down, confusion for short duration)
-Ex: flip attack, lay down 1 enemy to (like /). Next turn is spent by enemy getting up.
+Ex: flip attack, lay down 1 enemy to (like /). Next turn is spent by enemy getting up. (DONE)
 Probabilistically run these effects when you attack people.
 Stun charge shooter in combat
 Probabilistic attack power
+Disarm (shields/guns) + Disassemble (seperate out the the gun parts and throw them aside.
 
 Jump : provide target location
 Launch/Jump/Glide improvement:
@@ -49,16 +59,18 @@ Wall/Ceiling action:
 1. Adj to wall => less/zero impulse consumption + can use batarangs and other equipment
 (meaning more stability)
 2. Else, higher impulse consumption but can drop. Cant fire etc. You need both hands to hold on to the ceiling. Can't really launch -> need to angle etc.
+DONE - added stability component
 
 
 
 New Attack Dimensions:
 ======================
-Batarangs (auto/manual target, inventory mgmt, electric version, relation to noise metric, sonar version, remote control version)
+Batarangs (auto/manual target, inventory mgmt, electric version, sonic version(requires time to recharge), sonar version, remote control version)
 Explosive Gel (manual trigger, proximity trigger)
 BatClaw -> grab and pull enemies/things from afar
 Ultra BatClaw -> pull large objects and weak sections off walls
 Line launcher -> travel across regions
+Smoke bombs
 
 Better level design:
 ====================
@@ -67,6 +79,7 @@ Larger levels to get the feel.
 Missing sections/Corridors to actually use launch/line launchers and strats like enemy boxing.
 Larger rooms with walls/pillers in between
 Object with inherent height properties
+Wall and boundary management -> pretty weak so far -> needs clear ideas -> see: sonar on wall looks the same as the background
 
 Large scale map / plan:
 =======================
@@ -74,6 +87,7 @@ Each minigame is inside a building etc. Can roam inside a city in overview mode.
 You have some equipment you can load up when you go in / or at select floors 
 (large veranda's where you can call in a rocket of supplies)
 Hostage/Innocent people presence can motivate why you need bash every guy down -> hostage needs to get out that way.
+Hidden sections behind weak walls revealed by detective mode/sonar (??)
 
 Player Constraints
 ==================
