@@ -1,11 +1,15 @@
 #ifndef AI_H
 #define AI_H
 
+#include <stack>
+
 #include "actor.hpp"
 #include "engine.hpp"
 #include "physiology.hpp"
 #include "enum.hpp"
+#include "intent.hpp"
 
+class Intent;
 class Physiology;
 
 class Ai {
@@ -30,8 +34,10 @@ public :
    void update(Actor *owner);
    Physiology *phys;
    RangedWeapon weap;
+   std::stack<Intent*> intents;
 
    void moveOrAttack(Actor *owner, int targetx, int targety);
+   void move(Actor *owner, int targetx, int targety);
 };
 
 #endif

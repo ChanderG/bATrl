@@ -1,5 +1,6 @@
 #include "ai.hpp"
 
+#include <cstdio>
 #include <cmath>
 
 MonsterAi::MonsterAi(RangedWeapon weap): weap(weap) {
@@ -13,6 +14,19 @@ MonsterAi::MonsterAi(RangedWeapon weap): weap(weap) {
  * Name left in for legacy reasons.
  */
 void MonsterAi::update(Actor *owner) {
+  // one time initialization
+  if (intents.empty()){
+    TCODRandom *rng=TCODRandom::getInstance();
+    int chance = rng->getInt(0,100);
+    if (chance < 50){
+      // create default intent -> StayIntent
+      intents.push(new StayIntent(owner));
+    } else {
+      // create pacing enemy
+      intents.push(new PatrolIntent(owner));
+    }
+  }
+
   if ( owner->destructible && owner->destructible->isDead() ) {
     // remove all physiological effects
     phys->currPhysState = NORMAL;
@@ -52,6 +66,20 @@ void MonsterAi::update(Actor *owner) {
 	engine.gui->message(TCODColor::red, "The %s misses.!!", owner->name);
       }
     }
+
+    // used up turn
+    return;
+  }
+
+  // general intent processing
+  // grab topmost intent
+  Intent* currIntent = intents.top();
+  // carry it out
+  currIntent->carryOutIntent(owner);
+  // check if intent is don; if so -> remove it
+  if (currIntent->isDone()){
+    intents.pop();
+    delete currIntent;
   }
 
 }
@@ -75,5 +103,23 @@ void MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety) {
     }
   } else if ( owner->attacker ) {
     owner->attacker->attack(owner,engine.player);
+  }
+}
+
+void MonsterAi::move(Actor *owner, int targetx, int targety) {
+  int dx = targetx - owner->x;
+  int dy = targety - owner->y;
+  int stepx = (dx > 0 ? 1:-1);
+  int stepy = (dy > 0 ? 1:-1);
+  float distance=sqrtf(dx*dx+dy*dy);
+  dx = (int)(round(dx/distance));
+  dy = (int)(round(dy/distance));
+  if ( !engine.map->isWall(owner->x+dx,owner->y+dy) ) {
+    owner->x += dx;
+    owner->y += dy;
+  } else if ( !engine.map->isWall(owner->x,owner->y+stepy) ) {
+    owner->y += stepy;
+  } else if ( !engine.map->isWall(owner->x+stepx,owner->y) ) {
+    owner->x += stepx;
   }
 }

@@ -21,6 +21,9 @@ class Physiology{
     Physiology();
     void update_internal(Actor *owner);
     void update_external_attack(Actor *owner, AgileAttack mode);
+    // Add observing an attack function -> for second degree reaction
+    // Eg, shooters miss with some probability when the b@ jump attacks
+    // based on how far the jump is
     bool process_current_state(Actor *owner);
 
     void render_phys_state(Actor *owner);
