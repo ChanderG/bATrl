@@ -47,13 +47,14 @@ const int AgileAttackCeilingCancelMessagesSize = 6;
  */
 enum PhysiologicalState {
   NORMAL,
+  ALERT,
   STUNNED,  // leads to entity not moving for a couple of turns
   CONFUSED, // leads to entity moving in the wrong direction
   AFRAID,   // leads to entity running away
   STARTLED  // leads to entity perform the next turn badly
 };
 
-const std::string PhysStateMessage[] = {"normal", "stunned", "confused", "afraid", "startled"};
+const std::string PhysStateMessage[] = {"normal", "alert", "stunned", "confused", "afraid", "startled"};
 
 enum RangedWeapon {
   NOWEAP,

@@ -41,7 +41,7 @@ void MonsterAi::update(Actor *owner) {
     // effect shoot based on physio
     engine.gui->message(TCODColor::red, "The %s shoots at you.", owner->name);
     TCODRandom *rng=TCODRandom::getInstance();
-    if (phys->currPhysState == NORMAL){
+    if (phys->currPhysState==NORMAL || phys->currPhysState==ALERT){
       engine.player->destructible->takeDamage(engine.player, rangedWeaponDamages.at(weap));
     } else {
       // case of afraid or startled

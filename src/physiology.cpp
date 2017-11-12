@@ -1,5 +1,7 @@
 #include "physiology.hpp"
 
+#include <cmath>
+
 // Constructor -> all entities start at normal state
 Physiology::Physiology(){
   currStateTimeout = 0;
@@ -16,10 +18,37 @@ Physiology::Physiology(){
 void Physiology::update_internal(Actor *owner){
   if(currStateTimeout > 0) currStateTimeout--;
 
-  if ((currStateTimeout==0) && (currPhysState!=NORMAL)){
-    currPhysState = NORMAL;
-    render_phys_state(owner);
+  if(currPhysState==NORMAL){
+    // owner is not aware of player so far
+    if ((engine.player->z->onFloor) && engine.map->isInFov(owner->x,owner->y)) {
+      // player suddenly in view
+      // distance to player
+      int dist = sqrt((owner->x-engine.player->x)*(owner->x-engine.player->x) + (owner->y-engine.player->y)*(owner->y-engine.player->y));
+      // get startled proportionate to the distance
+      currPhysState = STARTLED;
+      currStateTimeout = (engine.fovRadius - dist)/2;
+      render_phys_state(owner);
+    }
   }
+
+  // expand alert properties
+  if(currPhysState==ALERT && (engine.player->z->onFloor) && engine.map->isInFov(owner->x,owner->y)){
+    // continue to stay alert
+    currPhysState = ALERT;
+    currStateTimeout = 4;
+  }
+
+  if ((currStateTimeout==0) && (currPhysState!=NORMAL)){
+    // if just finished being startled and can see the b@
+    if(currPhysState==STARTLED && (engine.player->z->onFloor) && engine.map->isInFov(owner->x,owner->y)){
+      currPhysState = ALERT;
+      render_phys_state(owner);
+    } else {
+      currPhysState = NORMAL;
+      render_phys_state(owner);
+    }
+  }
+
 }
 
 /*
@@ -170,6 +199,8 @@ bool Physiology::process_current_state(Actor *owner){
   switch (currPhysState){
     case NORMAL: return false;
 
+    case ALERT: return false;
+
     case STUNNED:{
 		   // cannot really move or attack
 		   return true;
@@ -206,6 +237,7 @@ bool Physiology::process_current_state(Actor *owner){
 void Physiology::render_phys_state(Actor *owner){
   switch(currPhysState){
     case NORMAL: owner->bgcol = TCODColor::black; break;
+    case ALERT: owner->bgcol = TCODColor::white; break;
     case STUNNED: owner->bgcol = TCODColor::orange; break;
     case CONFUSED: owner->bgcol = TCODColor::yellow; break;
     case AFRAID: owner->bgcol = TCODColor::red; break;
