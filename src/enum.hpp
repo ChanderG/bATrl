@@ -2,8 +2,9 @@
 #define ENUM_H
 
 #include <string>
+#include <map>
 
-// Enum definittions
+// Enum definitions
 
 /*
  * The attacks have varying impact on HP. But more importantly, they have varying effects
@@ -53,5 +54,14 @@ enum PhysiologicalState {
 };
 
 const std::string PhysStateMessage[] = {"normal", "stunned", "confused", "afraid", "startled"};
+
+enum RangedWeapon {
+  NOWEAP,
+  SHOTGUN,
+  SMG
+};
+
+// Damages corrected for b@suit defense
+const std::map<RangedWeapon, float> rangedWeaponDamages = {{NOWEAP, 0}, {SHOTGUN, 5}, {SMG, 10}};
 
 #endif

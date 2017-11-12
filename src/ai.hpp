@@ -4,6 +4,7 @@
 #include "actor.hpp"
 #include "engine.hpp"
 #include "physiology.hpp"
+#include "enum.hpp"
 
 class Physiology;
 
@@ -25,9 +26,11 @@ protected :
 
 class MonsterAi : public Ai {
 public :
-   MonsterAi();
+   MonsterAi(RangedWeapon weap);
    void update(Actor *owner);
    Physiology *phys;
+   RangedWeapon weap;
+
    void moveOrAttack(Actor *owner, int targetx, int targety);
 };
 

@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-MonsterAi::MonsterAi() {
+MonsterAi::MonsterAi(RangedWeapon weap): weap(weap) {
   // create 1 size fits all physiological model
   phys = new Physiology();
 }
@@ -27,10 +27,33 @@ void MonsterAi::update(Actor *owner) {
   // if proceessed and overwhelmed exit
   if(physEventProcessed == true) return;
 
+  // Refactor below to intents system
+
   // only if player is on floor and in line of sight
   if ((engine.player->z->onFloor) && engine.map->isInFov(owner->x,owner->y)) {
-    moveOrAttack(owner, engine.player->x,engine.player->y);
+    // if dont have a ranged weapon
+    if(weap == NOWEAP){
+      moveOrAttack(owner, engine.player->x,engine.player->y);
+      return;
+    }
+
+    // for now line of sight requires b@ to be on floor
+    // effect shoot based on physio
+    engine.gui->message(TCODColor::red, "The %s shoots at you.", owner->name);
+    TCODRandom *rng=TCODRandom::getInstance();
+    if (phys->currPhysState == NORMAL){
+      engine.player->destructible->takeDamage(engine.player, rangedWeaponDamages.at(weap));
+    } else {
+      // case of afraid or startled
+      // 10% chance of actually hitting
+      if (rng->getInt(0, 100) < 10){
+	engine.player->destructible->takeDamage(engine.player, rangedWeaponDamages.at(weap));
+      } else {
+	engine.gui->message(TCODColor::red, "The %s misses.!!", owner->name);
+      }
+    }
   }
+
 }
 
 void MonsterAi::moveOrAttack(Actor *owner, int targetx, int targety) {

@@ -172,19 +172,35 @@ bool Map::canWalk(int x, int y) const {
 
 void Map::addMonster(int x, int y){
   TCODRandom *rng=TCODRandom::getInstance();
-  if ( rng->getInt(0,100) < 80 ) {
+  int chance = rng->getInt(0,100);
+
+  if (chance < 60 ) {
     // create a thug
     Actor *thug = new Actor(x,y,'t',"thug", TCODColor::desaturatedGreen);
     thug->destructible = new MonsterDestructible(10,0,"unconcious thug");
     thug->attacker = new Attacker(3);
-    thug->ai = new MonsterAi();
+    thug->ai = new MonsterAi(NOWEAP);
     engine.actors.push(thug);
-  } else {
+  } else if (chance < 80) {
     // create a gangster
     Actor *gangster = new Actor(x,y,'g',"gangster", TCODColor::darkerGreen);
     gangster->destructible = new MonsterDestructible(20,1,"passed out gangster");
     gangster->attacker = new Attacker(5);
-    gangster->ai = new MonsterAi();
+    gangster->ai = new MonsterAi(NOWEAP);
     engine.actors.push(gangster);
+  } else if (chance < 90) {
+    // create an armed thug
+    Actor *armed_thug = new Actor(x,y,'a',"armed thug", TCODColor::desaturatedRed);
+    armed_thug->destructible = new MonsterDestructible(10,1,"unconcious armed thug");
+    armed_thug->attacker = new Attacker(3);
+    armed_thug->ai = new MonsterAi(SHOTGUN);
+    engine.actors.push(armed_thug);
+  } else if (chance < 100) {
+    // create a henchman
+    Actor *henchman = new Actor(x,y,'h',"henchman", TCODColor::desaturatedRed);
+    henchman->destructible = new MonsterDestructible(20,1,"unconcious henchman");
+    henchman->attacker = new Attacker(5);
+    henchman->ai = new MonsterAi(SMG);
+    engine.actors.push(henchman);
   }
 }
