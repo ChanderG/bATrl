@@ -38,7 +38,9 @@ class PatrolIntent: public Intent {
 private:
     int origx, origy; 
     int destx, desty;
-    bool awayPhase;
+    bool awayPhase; // are we going away from spawn point?
+    int turn_count; // current level
+    int max_turn_count; // controlling speed
 
 public:
     PatrolIntent(Actor *owner);

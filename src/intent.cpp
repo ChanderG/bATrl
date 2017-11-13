@@ -45,13 +45,23 @@ PatrolIntent::PatrolIntent(Actor *owner){
   }
 
   awayPhase = true;
+  // Speed set to 1/2 player speed
+  max_turn_count = 1;
+  turn_count = 0;
 }
 
 /*
  * Go towards the other endpoint.
- * Dumb right now -> will attack even allies in the way.
+ * Will walk across allies safetly.
  */
 void PatrolIntent::carryOutIntent(Actor *owner) {
+  turn_count++;
+
+  if(turn_count != 0){
+    if (turn_count == max_turn_count) turn_count = -1;
+    return;
+  }
+
   if(awayPhase){
     ((MonsterAi*)owner->ai)->move(owner, destx, desty);
     if(owner->x==destx && owner->y==desty){
