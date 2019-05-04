@@ -27,14 +27,14 @@ Overwhelmed -> suffering 1 of the effects and cannot temporarily do the intent
 
 Enemy types:
 ============
-Enemy weapons / gun toting villains
+Enemy weapons / gun toting villains (DONE)
+More Enemy type names: henchmen (DONE)
 Enemy uniques
-More Enemy type names: henchmen
 Enemy equipment: thermal imaging headsets -> can see b@ on the rafters
 Armored guys -> need special attack to take them down (RAID - rapid array of inexpensive blows )
-(Possible D term -> Decks, 
+(Possible D term -> Decks,
 Sonar jammer -> the b@'s sonar is affected
-hields
+Shields
 
 Attacks:
 ========
@@ -88,6 +88,7 @@ You have some equipment you can load up when you go in / or at select floors
 (large veranda's where you can call in a rocket of supplies)
 Hostage/Innocent people presence can motivate why you need bash every guy down -> hostage needs to get out that way.
 Hidden sections behind weak walls revealed by detective mode/sonar (??)
+No need to go into every building at all. But can, -> will have people etc.
 
 Player Constraints
 ==================
